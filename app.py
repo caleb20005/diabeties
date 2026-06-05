@@ -189,7 +189,7 @@ def clean_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series, dict[str, flo
     X = df[FEATURE_COLUMNS].copy()
     y = df[TARGET_COLUMN].astype(int)
 
-    X.loc[:, INVALID_ZERO_COLUMNS] = X[INVALID_ZERO_COLUMNS].replace(0, np.nan)
+    X[INVALID_ZERO_COLUMNS] = X[INVALID_ZERO_COLUMNS].astype(float).replace(0, np.nan)
     medians = X.median(numeric_only=True).to_dict()
     X = X.fillna(medians)
     return X, y, medians
@@ -242,7 +242,7 @@ def train_model() -> dict[str, object]:
 def sanitize_input(df: pd.DataFrame, medians: dict[str, float]) -> pd.DataFrame:
     frame = df.copy()
     frame = frame[FEATURE_COLUMNS]
-    frame.loc[:, INVALID_ZERO_COLUMNS] = frame[INVALID_ZERO_COLUMNS].replace(0, np.nan)
+    frame[INVALID_ZERO_COLUMNS] = frame[INVALID_ZERO_COLUMNS].astype(float).replace(0, np.nan)
     for column, median in medians.items():
         frame[column] = frame[column].fillna(median)
     return frame.astype(float)
