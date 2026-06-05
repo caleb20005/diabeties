@@ -49,128 +49,144 @@ INVALID_ZERO_COLUMNS = [
 ]
 
 
-def inject_styles() -> None:
+def inject_styles(dark_mode: bool) -> None:
+    if dark_mode:
+        bg = "#0f1412"
+        panel = "#18211e"
+        panel_soft = "#21302b"
+        text = "#e7f0ed"
+        muted = "#a7b8b2"
+        border = "rgba(231, 240, 237, 0.12)"
+        hero_bg = "linear-gradient(135deg, rgba(29, 139, 122, 0.22), rgba(24, 33, 30, 0.98))"
+        app_bg = (
+            "radial-gradient(circle at top left, rgba(29, 139, 122, 0.18), transparent 28%),"
+            "radial-gradient(circle at top right, rgba(243, 156, 74, 0.14), transparent 22%),"
+            "linear-gradient(180deg, #111816 0%, #0f1412 100%)"
+        )
+        tab_bg = "rgba(255, 255, 255, 0.04)"
+        tab_active = "rgba(29, 139, 122, 0.22)"
+    else:
+        bg = "#f6f8f7"
+        panel = "#ffffff"
+        panel_soft = "#edf3f1"
+        text = "#16302c"
+        muted = "#5d726c"
+        border = "rgba(22, 48, 44, 0.10)"
+        hero_bg = "linear-gradient(135deg, rgba(29, 139, 122, 0.12), rgba(255, 255, 255, 0.95))"
+        app_bg = (
+            "radial-gradient(circle at top left, rgba(29, 139, 122, 0.09), transparent 30%),"
+            "radial-gradient(circle at top right, rgba(243, 156, 74, 0.11), transparent 24%),"
+            "linear-gradient(180deg, #fbfcfb 0%, #f6f8f7 100%)"
+        )
+        tab_bg = "rgba(255, 255, 255, 0.8)"
+        tab_active = "rgba(29, 139, 122, 0.13)"
+
     st.markdown(
-        """
+        f"""
         <style>
-            :root {
-                --bg: #f6f8f7;
-                --panel: #ffffff;
-                --panel-soft: #edf3f1;
-                --text: #16302c;
-                --muted: #5d726c;
-                --primary: #1d8b7a;
-                --primary-dark: #136456;
-                --accent: #f39c4a;
-                --border: rgba(22, 48, 44, 0.10);
-            }
+            .stApp {{
+                background: {app_bg};
+                color: {text};
+            }}
 
-            .stApp {
-                background:
-                    radial-gradient(circle at top left, rgba(29, 139, 122, 0.09), transparent 30%),
-                    radial-gradient(circle at top right, rgba(243, 156, 74, 0.11), transparent 24%),
-                    linear-gradient(180deg, #fbfcfb 0%, var(--bg) 100%);
-                color: var(--text);
-            }
-
-            .block-container {
+            .block-container {{
                 padding-top: 1.25rem;
                 padding-bottom: 2rem;
-            }
+            }}
 
-            .hero {
+            .hero {{
                 padding: 1.4rem 1.5rem;
-                border: 1px solid var(--border);
+                border: 1px solid {border};
                 border-radius: 14px;
-                background: linear-gradient(135deg, rgba(29, 139, 122, 0.12), rgba(255, 255, 255, 0.95));
+                background: {hero_bg};
                 box-shadow: 0 8px 28px rgba(22, 48, 44, 0.06);
                 margin-bottom: 1rem;
-            }
+            }}
 
-            .hero h1 {
+            .hero h1 {{
                 margin: 0;
                 font-size: 2rem;
                 letter-spacing: 0;
-                color: var(--text);
-            }
+                color: {text};
+            }}
 
-            .hero p {
+            .hero p {{
                 margin: 0.45rem 0 0;
-                color: var(--muted);
+                color: {muted};
                 font-size: 1rem;
                 max-width: 900px;
-            }
+            }}
 
-            .metric-card, .surface {
-                background: var(--panel);
-                border: 1px solid var(--border);
+            .metric-card, .surface {{
+                background: {panel};
+                border: 1px solid {border};
                 border-radius: 12px;
                 padding: 1rem;
                 box-shadow: 0 6px 18px rgba(22, 48, 44, 0.04);
-            }
+            }}
 
-            .metric-label {
-                color: var(--muted);
+            .metric-label {{
+                color: {muted};
                 font-size: 0.85rem;
                 margin-bottom: 0.25rem;
-            }
+            }}
 
-            .metric-value {
-                color: var(--text);
+            .metric-value {{
+                color: {text};
                 font-size: 1.7rem;
                 font-weight: 700;
                 line-height: 1.1;
-            }
+            }}
 
-            .metric-note {
-                color: var(--muted);
+            .metric-note {{
+                color: {muted};
                 font-size: 0.8rem;
                 margin-top: 0.25rem;
-            }
+            }}
 
-            .risk-chip {
+            .risk-chip {{
                 display: inline-flex;
                 align-items: center;
                 gap: 0.5rem;
                 padding: 0.35rem 0.7rem;
                 border-radius: 999px;
-                border: 1px solid var(--border);
-                background: var(--panel-soft);
-                color: var(--text);
+                border: 1px solid {border};
+                background: {panel_soft};
+                color: {text};
                 font-size: 0.9rem;
                 font-weight: 600;
-            }
+            }}
 
-            .risk-high {
+            .risk-high {{
                 background: rgba(217, 69, 52, 0.10);
                 color: #9a2d24;
-            }
+            }}
 
-            .risk-medium {
+            .risk-medium {{
                 background: rgba(243, 156, 74, 0.14);
                 color: #8e5316;
-            }
+            }}
 
-            .risk-low {
+            .risk-low {{
                 background: rgba(29, 139, 122, 0.12);
                 color: #16685b;
-            }
+            }}
 
-            .stTabs [data-baseweb="tab-list"] {
+            .stTabs [data-baseweb="tab-list"] {{
                 gap: 0.35rem;
-            }
+            }}
 
-            .stTabs [data-baseweb="tab"] {
+            .stTabs [data-baseweb="tab"] {{
                 border-radius: 999px;
                 padding: 0.45rem 0.9rem;
-                background: rgba(255, 255, 255, 0.8);
-            }
+                background: {tab_bg};
+            }}
 
-            .stTabs [aria-selected="true"] {
-                background: rgba(29, 139, 122, 0.13) !important;
-            }
+            .stTabs [aria-selected="true"] {{
+                background: {tab_active} !important;
+            }}
 
-            footer {visibility: hidden;}
+            footer {{visibility: hidden;}}
         </style>
         """,
         unsafe_allow_html=True,
@@ -274,7 +290,15 @@ def safe_probability(model: RandomForestClassifier, row: pd.DataFrame) -> float:
 
 
 def main() -> None:
-    inject_styles()
+    if "dark_mode" not in st.session_state:
+        st.session_state.dark_mode = False
+
+    with st.sidebar:
+        st.subheader("Display")
+        st.session_state.dark_mode = st.toggle("Dark mode", value=st.session_state.dark_mode)
+
+    dark_mode = st.session_state.dark_mode
+    inject_styles(dark_mode)
 
     bundle = train_model()
     model = bundle["model"]
@@ -415,13 +439,14 @@ def main() -> None:
         heatmap = px.imshow(
             cm_df,
             text_auto=True,
-            color_continuous_scale=["#edf3f1", "#1d8b7a"],
+            color_continuous_scale=["#edf3f1", "#1d8b7a"] if not dark_mode else ["#20312c", "#52b79f"],
             aspect="auto",
         )
         heatmap.update_layout(
             margin=dict(l=0, r=0, t=24, b=0),
             coloraxis_showscale=False,
             title="Confusion matrix",
+            template="plotly_dark" if dark_mode else "plotly_white",
         )
 
         left, right = st.columns([1, 1], gap="large")
@@ -438,7 +463,11 @@ def main() -> None:
                 labels={"feature": "Feature", "importance": "Importance"},
                 title="Feature importance",
             )
-            fig.update_layout(margin=dict(l=0, r=0, t=24, b=0), yaxis={"categoryorder": "total ascending"})
+            fig.update_layout(
+                margin=dict(l=0, r=0, t=24, b=0),
+                yaxis={"categoryorder": "total ascending"},
+                template="plotly_dark" if dark_mode else "plotly_white",
+            )
             st.plotly_chart(fig, use_container_width=True)
 
         with st.expander("Dataset preview", expanded=False):
