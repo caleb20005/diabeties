@@ -307,39 +307,48 @@ def main() -> None:
     tab_predict, tab_batch, tab_model = st.tabs(["Single prediction", "Batch upload", "Model insights"])
 
     with tab_predict:
-        left, right = st.columns([1.2, 0.8], gap="large")
-        with left:
-            st.subheader("Patient details")
-            with st.form("single_prediction_form"):
-                c1, c2 = st.columns(2)
-                with c1:
-                    pregnancies = st.slider("Pregnancies", 0, 20, 2)
-                    glucose = st.slider("Glucose", 0, 250, 120)
-                    blood_pressure = st.slider("Blood pressure", 0, 140, 72)
-                    skin_thickness = st.slider("Skin thickness", 0, 100, 23)
-                with c2:
-                    insulin = st.slider("Insulin", 0, 850, 79)
-                    bmi = st.slider("BMI", 0.0, 70.0, 32.0, 0.1)
-                    pedigree = st.slider("Diabetes pedigree", 0.0, 3.0, 0.5, 0.01)
-                    age = st.slider("Age", 1, 100, 33)
-                submitted = st.form_submit_button("Predict risk", use_container_width=True)
+        st.subheader("Prediction")
+        placeholder = st.container()
+        st.markdown(
+            """
+            <div class="surface">
+                <strong>What the model uses</strong><br/>
+                The model looks at common clinical measurements from the Pima diabetes dataset and learns from patterns in the training data.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-            input_frame = pd.DataFrame(
-                [{
-                    "pregnancies": pregnancies,
-                    "glucose": glucose,
-                    "blood_pressure": blood_pressure,
-                    "skin_thickness": skin_thickness,
-                    "insulin": insulin,
-                    "bmi": bmi,
-                    "diabetes_pedigree": pedigree,
-                    "age": age,
-                }]
-            )
-            prepared_input = sanitize_input(input_frame, medians)
+        st.subheader("Patient details")
+        with st.form("single_prediction_form"):
+            c1, c2 = st.columns(2)
+            with c1:
+                pregnancies = st.slider("Pregnancies", 0, 20, 2)
+                glucose = st.slider("Glucose", 0, 250, 120)
+                blood_pressure = st.slider("Blood pressure", 0, 140, 72)
+                skin_thickness = st.slider("Skin thickness", 0, 100, 23)
+            with c2:
+                insulin = st.slider("Insulin", 0, 850, 79)
+                bmi = st.slider("BMI", 0.0, 70.0, 32.0, 0.1)
+                pedigree = st.slider("Diabetes pedigree", 0.0, 3.0, 0.5, 0.01)
+                age = st.slider("Age", 1, 100, 33)
+            submitted = st.form_submit_button("Predict risk", use_container_width=True)
 
-        with right:
-            st.subheader("Prediction")
+        input_frame = pd.DataFrame(
+            [{
+                "pregnancies": pregnancies,
+                "glucose": glucose,
+                "blood_pressure": blood_pressure,
+                "skin_thickness": skin_thickness,
+                "insulin": insulin,
+                "bmi": bmi,
+                "diabetes_pedigree": pedigree,
+                "age": age,
+            }]
+        )
+        prepared_input = sanitize_input(input_frame, medians)
+
+        with placeholder:
             if submitted:
                 probability = safe_probability(model, prepared_input)
                 label, css_class = prediction_label(probability)
@@ -357,16 +366,6 @@ def main() -> None:
                 )
             else:
                 st.info("Adjust the patient details, then press Predict risk to generate an estimate.")
-
-            st.markdown(
-                """
-                <div class="surface">
-                    <strong>What the model uses</strong><br/>
-                    The model looks at common clinical measurements from the Pima diabetes dataset and learns from patterns in the training data.
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
 
     with tab_batch:
         st.subheader("Batch scoring")
